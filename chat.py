@@ -1,12 +1,10 @@
-from revChatGPT.V1 import Chatbot
+from revChatGPT.V3 import Chatbot
 from os import getenv
 from threading import Thread
 from uuid import uuid4
 from func import okreturn, jsonerror
 
-chatbot = Chatbot(config={
-    'session_token': getenv('CHATGPT_TOKEN')
-})
+chatbot = Chatbot(api_key=getenv('CHATGPT_TOKEN'))
 
 dic = {}
 
@@ -22,13 +20,10 @@ def get(uu):
 
 
 def th(q, uu):
-    try:
-        dic[uu] = {'ans': '', 'finish': False}
-        for data in chatbot.ask(q):
-            dic[uu]['ans'] = data["message"]
-        dic[uu]['finish'] = True
-    except:
-        dic[uu]['finish'] = True
+    dic[uu] = {'ans': '', 'finish': False}
+    for data in chatbot.ask(q):
+        dic[uu]['ans'] += data
+    dic[uu]['finish'] = True
 
 
 def askq(q):
